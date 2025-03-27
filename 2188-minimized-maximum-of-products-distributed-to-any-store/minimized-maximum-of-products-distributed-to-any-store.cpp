@@ -1,24 +1,25 @@
 class Solution {
 public:
-    bool isPossible(int n,vector<int>&quantities,int mid){
-        int stores=0;
-        for(auto x:quantities){
-            stores+=x/mid;
-            if(x%mid) stores++;
-            if(stores>n) return 0;
-        }
-        return stores<=n;
+int nofstores(vector<int>& quantities,int mid){
+    int stores=0;
+    for(int i=0;i<quantities.size();i++){
+        stores+=ceil((double)quantities[i] / (double)mid);
     }
+    return stores;
+}
     int minimizedMaximum(int n, vector<int>& quantities) {
-        int s=1,e=100000,ans=-1;
-        while(s<=e){
-            int mid=s+(e-s)/2;
-            if(isPossible(n,quantities,mid)){
+        int low=1;
+        int high=*max_element(quantities.begin(),quantities.end());
+        int ans=-1;
+
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            if(nofstores(quantities,mid)<=n){
                 ans=mid;
-                e=mid-1;
+                high=mid-1;    
             }
             else{
-                s=mid+1;
+                low=mid+1;
             }
         }
         return ans;
