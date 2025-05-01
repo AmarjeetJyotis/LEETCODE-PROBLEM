@@ -1,37 +1,59 @@
 class Solution {
 public:
-    bool helper(vector<int>& tasks, vector<int>& workers, int pills, int strength, int k){
-        if(k == 0) return true;
-        multiset<int> wks(workers.end() - k, workers.end());
-        for(int i = k-1; i >= 0; i--)
+    bool check(vector<int>& tasks, vector<int>& workers, int pills, int strength,int index)
+    {
+        multiset<int> st;
+        for(auto it:workers)
         {
-            int t = tasks[i];
-            if(tasks[i] > *wks.rbegin() and pills > 0)
+            st.insert(it);
+        }
+        for(int i=index-1;i>=0;i--)
+        {
+            auto it=st.lower_bound(tasks[i]);
+            if(it!=st.end())
             {
-                t -= strength;
-                pills--;
+                st.erase(it);
             }
-            auto x = wks.lower_bound(t);
-            if(x == wks.end()) return false;
-            wks.erase(x);
+            else
+            {
+                if(pills<=0)
+                {
+                    return false;
+                }
+                else
+                {
+                    it=st.lower_bound(tasks[i]-strength);
+                    if(it!=st.end())
+                    {
+                        st.erase(it);
+                        pills--;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
         }
         return true;
     }
     int maxTaskAssign(vector<int>& tasks, vector<int>& workers, int pills, int strength) {
-        sort(workers.begin(), workers.end());
-        sort(tasks.begin(), tasks.end());
-        int l = 0, r = min(workers.size(), tasks.size());
-        while(l < r)
+        sort(tasks.begin(),tasks.end());
+        sort(workers.begin(),workers.end());
+        int low=0;
+        int high=min(workers.size(),tasks.size());
+        while(low<high)
         {
-            int m = (l + r + 1)/2;
-            if(helper(tasks, workers, pills, strength, m))
+            int mid=(low+high+1)/2;
+            if(check(tasks,workers,pills,strength,mid)==true)
             {
-                l = m;
+                low=mid;
             }
-            else r = m-1;
+            else
+            {
+                high=mid-1;
+            }
         }
-        return l;
+        return high;
     }
-    // 2 - 3
-    // 3
 };
