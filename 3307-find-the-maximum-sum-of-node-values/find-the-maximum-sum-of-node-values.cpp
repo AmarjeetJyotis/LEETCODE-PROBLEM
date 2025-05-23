@@ -1,0 +1,1 @@
+class Solution{public:long long maximumValueSum(vector<int>&n,int k,vector<vector<int>>&e){long long s=0;int g=INT_MAX,l=INT_MAX;bool b=1;for(int x:n){int y=x^k;bool z=y>x;int d=z?y-x:x-y;s+=z?y:x;(z?g:l)=min(z?g:l,d);b^=z;}return b?s:max(s-g,s-l);}};
