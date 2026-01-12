@@ -7,15 +7,14 @@ public:
                 temp.push_back(nums[i]);
             }
         }
+
         int nz=temp.size();
         for(int i=0; i<nz; i++){
             nums[i]=temp[i];
         }
-
         // for zero
         for(int i=nz; i<nums.size(); i++){
             nums[i]=0;
         }
-       
     }
 };
